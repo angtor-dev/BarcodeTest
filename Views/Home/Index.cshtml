@@ -1,8 +1,45 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+video {
+    max-width: min(97vh, 97vw);
+}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+.decode-controls {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    gap: 36px;
+    bottom: 20px;
+    justify-content: center;
+    z-index: 2;
+}
+
+.decode-controls > button {
+    transform: scale(1.5);
+}
+
+canvas {
+    position: fixed;
+    top:0;
+    opacity: 0;
+}
+</style>
+
+    <p>Codigo: <b id="codigo"></b></p>
+    <p>Formato: <b id="formato"></b></p>
+    <p>Decodificado en: <b id="tiempo"></b></p>
+
+    <div class="camara-controls">
+        <button onclick="stopCamera()">Detener Camara</button>
+    </div>
+
+    <div class="decode-controls">
+        <button onclick="capture()" id="scan">Escanear</button>
+    </div>
+
+    <video autoplay id="camara"></video>
+    <canvas id="canvas"></canvas>
+
+<script src="~/js/test.js"></script>
