@@ -78,9 +78,6 @@ namespace BarcodeTest.Controllers
 
                 return Json(model);
             }
-
-            model.ResponseCode = 2;
-            return Json(model);
         }
 
         public IActionResult Privacy()

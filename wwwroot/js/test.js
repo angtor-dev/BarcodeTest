@@ -31,7 +31,9 @@ navigator.mediaDevices.getUserMedia({
     // }
 })
 
+// Take a snapshot and sends it to the server
 function capture() {
+    console.time()
     var canvas = document.getElementById("canvas");
     var video = document.getElementById("camara");
     document.getElementById('codigo').textContent = "Decodificando..."
@@ -39,13 +41,19 @@ function capture() {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas
-      .getContext("2d")
-      .drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        .getContext("2d")
+        .drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+    
+    console.timeLog()
 
     image = canvas.toDataURL("image/png").split(';base64,')[1]
 
+    console.log(image)
+
     let formData = new FormData()
     formData.append("image", image)
+
+    console.timeLog()
 
     fetch('/Home/Index', {
         method: 'post',
@@ -73,14 +81,16 @@ function capture() {
     .catch(error => {
         console.error(error)
     })
-  }
 
-  function stopCamera() {
+    console.timeEnd()
+}
+
+function stopCamera() {
     try {
         if (localStream) {
             localStream.getTracks().forEach(track => track.stop());
         }
-    } catch (e){
+    } catch (e) {
         alert(e.message);
     }
 }

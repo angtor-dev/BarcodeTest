@@ -14,13 +14,9 @@ namespace BarcodeTest.Controllers
         {
             
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpGet]
-        public IActionResult CaptureImage()
+        public IActionResult Index()
         {
             return View();
         }

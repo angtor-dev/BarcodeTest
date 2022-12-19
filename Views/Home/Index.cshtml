@@ -3,17 +3,14 @@
 }
 <style>
 video {
-    max-width: min(97vh, 97vw);
+    max-width: 100%;
 }
 
 .decode-controls {
-    display: flex;
     position: absolute;
-    width: 100%;
-    gap: 36px;
     bottom: 20px;
-    justify-content: center;
-    z-index: 2;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .decode-controls > button {
@@ -23,7 +20,9 @@ video {
 canvas {
     position: fixed;
     top:0;
+    left: 0;
     opacity: 0;
+    z-index: -9999;
 }
 </style>
 
@@ -32,11 +31,11 @@ canvas {
     <p>Decodificado en: <b id="tiempo"></b></p>
 
     <div class="camara-controls">
-        <button onclick="stopCamera()">Detener Camara</button>
+        <button onclick="stopCamera()" class="btn btn-secondary">Detener Camara</button>
     </div>
 
     <div class="decode-controls">
-        <button onclick="capture()" id="scan">Escanear</button>
+        <button onclick="capture()" id="scan" class="btn btn-primary">Escanear</button>
     </div>
 
     <video autoplay id="camara"></video>
