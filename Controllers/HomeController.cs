@@ -10,6 +10,7 @@ namespace BarcodeTest.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         static readonly Stopwatch timer = new Stopwatch();
+        static readonly Stopwatch timer2 = new Stopwatch();
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -19,7 +20,18 @@ namespace BarcodeTest.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // Leyendo un codigo de barras desde una imagen
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Index(string image)
+        {
+            Console.WriteLine("Inicio de Script");
+            timer2.Restart();
+            BarcodeResultViewModel model = new();
+
+            var imgBytes = Convert.FromBase64String(image);
+
             BarcodeReaderOptions options = new BarcodeReaderOptions()
             {
                 Speed = ReadingSpeed.ExtremeDetail,
@@ -27,32 +39,8 @@ namespace BarcodeTest.Controllers
             };
 
             timer.Restart();
-            timer.Start();
-            BarcodeResults results = BarcodeReader.Read("Barcodes/barcode1.png", options);
-            // BarcodeResult Result = BarcodeReader.ReadASingleBarcode("Barcodes/barcode2.png", BarcodeEncoding.AllOneDimensional, BarcodeReader.BarcodeRotationCorrection.Extreme, BarcodeReader.BarcodeImageCorrection.MediumCleanPixels);
 
-            Console.WriteLine("Stop reading Barcode - " + timer.Elapsed.ToString());
-            timer.Stop();
-
-            foreach(var result in results)
-            {
-                Console.WriteLine("Value: " + result.Text + " Format: " + result.BarcodeType);
-            }
-
-            return View();
-        }
-
-        [HttpPost]
-        public JsonResult Index(string image)
-        {
-            BarcodeResultViewModel model = new();
-
-            var imgBytes = Convert.FromBase64String(image);
-
-            timer.Restart();
-            timer.Start();
-
-            BarcodeResults Results = BarcodeReader.Read(imgBytes);
+            BarcodeResults Results = BarcodeReader.Read(imgBytes, options);
 
             timer.Stop();
 
@@ -62,11 +50,15 @@ namespace BarcodeTest.Controllers
 
                 Console.WriteLine("Codigo: " + Result.Text);
                 Console.WriteLine("Formato: " + Result.BarcodeType);
+                Console.WriteLine("Tiempo en Decodificar: " + timer.Elapsed);
 
                 model.ResponseCode = 0;
                 model.Text = Result.Text;
                 model.Format = Result.BarcodeType.ToString();
                 model.TimeElapse = timer.Elapsed.ToString();
+
+                timer2.Stop();
+                Console.WriteLine("Tiempo en ejecutar script: " + timer2.Elapsed);
 
                 return Json(model);
             }
@@ -75,6 +67,9 @@ namespace BarcodeTest.Controllers
                 Console.WriteLine("No se encontro nigun codigo de barras");
 
                 model.ResponseCode = 1;
+
+                timer2.Stop();
+                Console.WriteLine("Tiempo en ejecutar script: " + timer2.Elapsed);
 
                 return Json(model);
             }
